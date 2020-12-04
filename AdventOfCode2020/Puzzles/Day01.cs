@@ -20,7 +20,7 @@ namespace AdventOfCode2020.Puzzles
         public static int GetAnswer2(int[] input)
         {
             var hashset = input.ToHashSet();
-            var (xr,yr) = hashset.SelectMany(x => hashset.Where(y => y != x && x + y < 2020).Select(y => (x,y)))
+            var (xr,yr) = input.SelectMany((x,i) => input.Skip(i).Where(y => x + y < 2020).Select(y => (x,y)))
                 .First(p=>hashset.Contains(2020 - p.x - p.y));
 
             return xr * yr * (2020 - xr - yr);

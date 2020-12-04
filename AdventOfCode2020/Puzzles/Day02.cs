@@ -3,20 +3,14 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCode2020.Puzzles
 {
+    /// <summary> https://adventofcode.com/2020/day/2 </summary>
     public class Day02
     {
         [Result(493)]
-        public static int GetAnswer1(string[] input)
-        {
-            return input.Select(Parse).Count(IsValid);
-        }
-
+        public static int GetAnswer1(string[] input) => input.Select(Parse).Count(IsValid);
 
         [Result(593)]
-        public static int GetAnswer2(string[] input)
-        {
-            return input.Select(Parse).Count(IsValidPolicy2);
-        }
+        public static int GetAnswer2(string[] input) => input.Select(Parse).Count(IsValidPolicy2);
 
         private static bool IsValid((int min, int max, char c, string pwd) arg)
         {

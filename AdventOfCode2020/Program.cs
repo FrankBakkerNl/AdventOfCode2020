@@ -37,10 +37,35 @@ namespace AdventOfCode2020
             // Keep the last result on the clipboard
             WindowsClipboard.SetText(result.ToString());
 
-            BackgroundColor = DarkGray;
-            ForegroundColor = White;
-            WriteLine(result);
+            var expectedResult = methodInfo.GetCustomAttribute<ResultAttribute>()?.Result;
 
+            if (expectedResult != null)
+            {
+                if (expectedResult.Equals(result))
+                {
+                    BackgroundColor = Green;
+                    ForegroundColor = White;
+                    WriteLine(result);
+                }
+                else
+                {
+                    BackgroundColor = Red;
+                    ForegroundColor = White;
+                    Write(result);
+
+                    BackgroundColor = Black;
+                    ForegroundColor = DarkGray;
+                    WriteLine(" Expected is " + expectedResult);
+                }
+            }
+            else
+            {
+                BackgroundColor = DarkGray;
+                ForegroundColor = White;
+                WriteLine(result);
+                WindowsClipboard.SetText(result.ToString());
+
+            }
             BackgroundColor = Black;
             ForegroundColor = Gray;
         }
