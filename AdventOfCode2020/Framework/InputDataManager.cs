@@ -9,7 +9,7 @@ namespace AdventOfCode2020
     {
         public static object[] GetInputArgs(MethodInfo method)
         {
-            var filename = $@"..\..\..\..\AdventOfCode2020\Data\{method.DeclaringType.Name}.txt";
+            var filename = $@"C:\Git\Personal\AdventOfCode2020\AdventOfCode2020\Data\{method.DeclaringType.Name}.txt";
 
             var param = method.GetParameters().FirstOrDefault();
             if (param == null)
