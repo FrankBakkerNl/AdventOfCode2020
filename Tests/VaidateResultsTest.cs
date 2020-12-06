@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using AdventOfCode2020;
 using FluentAssertions;
 using Xunit;
