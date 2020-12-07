@@ -7,6 +7,7 @@ namespace AdventOfCode2020.Puzzles
     /// <summary> https://adventofcode.com/2020/day/1 </summary>
     public class Day01
     {
+        /// <summary> Find combination of 2 numbers that add up to 2020 </summary>
         [Result(633216)]
         public static int GetAnswer1(int[] input)
         {
@@ -16,6 +17,7 @@ namespace AdventOfCode2020.Puzzles
             return xr * (2020 - xr);
         }
 
+        /// <summary> Find combination of 3 numbers that add up to 2020 </summary>
         [Result(68348924)]
         public static int GetAnswer2(int[] input)
         {

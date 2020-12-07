@@ -6,8 +6,11 @@ namespace AdventOfCode2020.Puzzles
     /// <summary> https://adventofcode.com/2020/day/2 </summary>
     public class Day02
     {
+        /// <summary> Find number of passwords that have one char occur between min and max times</summary>
         [Result(493)]
         public static int GetAnswer1(string[] input) => input.Select(Parse).Count(IsValid);
+
+        /// <summary> Find number of passwords that have one char at one of two specified positions</summary>
 
         [Result(593)]
         public static int GetAnswer2(string[] input) => input.Select(Parse).Count(IsValidPolicy2);
