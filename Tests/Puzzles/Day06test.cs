@@ -34,6 +34,5 @@ b";
         {
             Day06.GetAnswer2(SampleData).Should().Be(6);
         }
-
     }
 }

@@ -42,6 +42,13 @@ dark violet bags contain no other bags.".Split(new[] { Environment.NewLine }, St
         {
             var result = Day07.ParseLine("vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.");
             result.container.Should().Be("vibrant plum");
+            result.Should().BeEquivalentTo(
+            ("vibrant plum",
+                new []{
+                    (5, "faded blue"),
+                    (6, "dotted black")
+                }
+            ));
         }
     }
 }

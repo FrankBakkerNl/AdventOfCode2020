@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using static System.Environment;
 
 namespace AdventOfCode2020.Puzzles
 {
@@ -10,18 +9,21 @@ namespace AdventOfCode2020.Puzzles
     {
         [Result(7128)]
         public static int GetAnswer1(string input) => 
-            SplitGroups(input).Select(g=>g.Replace("\r\n", "").Distinct().Count()).Sum();
+            input.Split(NewLine + NewLine)
+                .Select(CountDistinct).Sum();
 
-        public static IEnumerable<string> SplitGroups(string input) => input.Split(new[] {"\r\n\r\n"}, StringSplitOptions.None);
+        private static int CountDistinct(string groupAnswers) =>
+            groupAnswers.Distinct().Except(NewLine).Count();
+
 
         [Result(3640)]
-        public static int GetAnswer2(string input) => SplitGroups(input)
-            .Select(CountAllCommonInGroup)
-            .Sum();
+        public static int GetAnswer2(string input) => 
+            input.Split(NewLine + NewLine)
+            .Select(CountCommon).Sum();
 
-        public static int CountAllCommonInGroup(string groupAnswers) =>
-            groupAnswers.Split(new[] {"\r\n"}, StringSplitOptions.None)
+        public static int CountCommon(string groupAnswers) =>
+            groupAnswers.Split(NewLine)
                 .Select(a => a.AsEnumerable())
-                .Aggregate((x, y) => x.Intersect(y)).Count();
+                .Aggregate(Enumerable.Intersect).Count();
     }
 }

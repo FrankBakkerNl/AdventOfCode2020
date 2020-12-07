@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace AdventOfCode2020.Puzzles
 {
@@ -11,7 +9,7 @@ namespace AdventOfCode2020.Puzzles
         [Result(185)]
         public static int GetAnswer1(string[] input)
         {
-            var map = GetMap(input);
+            var map = GetReverseMap(input);
 
             IEnumerable<string> GetPossibleContainers(string bag) =>
                 map[bag].Union(map[bag].SelectMany(GetPossibleContainers));
@@ -22,33 +20,44 @@ namespace AdventOfCode2020.Puzzles
         [Result(89084)]
         public static int GetAnswer2(string[] input)
         {
-            var map = GetMapReverse(input);
+            var map = GetMap(input);
 
             int CountContent(string bag) => map[bag].Sum(c => c.count + CountContent(c.bag) * c.count);
 
             return CountContent("shiny gold");
         }
 
-        public static ILookup<string, string> GetMap(string[] input) =>
-            GetMappings(input).ToLookup(m => m.inner.bag, m => m.container);
+        public static ILookup<string, string> GetReverseMap(string[] input) =>
+            GetMappings(input).ToLookup(m => m.content.bag, m => m.container);
 
-        public static ILookup<string, (int count, string bag)> GetMapReverse(string[] input) => 
-            GetMappings(input).ToLookup(m => m.container, m => m.inner);
+        public static ILookup<string, (int count, string bag)> GetMap(string[] input) => 
+            GetMappings(input).ToLookup(m => m.container, m => m.content);
 
-        private static IEnumerable<((int count, string bag) inner, string container)> GetMappings(string[] input) =>
+        private static IEnumerable<(string container, (int count, string bag) content)> GetMappings(string[] input) =>
             input.Where(l => !l.Contains("no other"))
                 .Select(ParseLine)
-                .SelectMany(l => l.content.Select(inner => (inner, l.container)));
+                .SelectMany(l => l.content.Select(inner => (l.container, inner)));
+
 
         public static (string container, (int count, string bag)[] content) ParseLine(string line)
         {
             // vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
-            var parts = line.Split(new[] {" bags contain ", ", "}, StringSplitOptions.None);
-            var container = parts[0];
+            // ------------              - ---------------  - -----------------
 
-            var content =  parts[1..].Select(inner => (count: int.Parse(inner[..inner.IndexOf(" ")]),
-                bag: inner[(inner.IndexOf(" ")+1)..inner.LastIndexOf(" bag") ])).ToArray();
-            return (container, content);
+            var indexOfBags = line.IndexOf(" bags");
+
+            return ( container: line[0 .. indexOfBags], 
+                     content:   line[(indexOfBags + 14)..].Split(", ")
+                                .Select(ParseContentPart)
+                                .ToArray()
+                     );
+        }
+
+        private static (int count, string bag) ParseContentPart(string c)
+        {
+            var indexOfSpace = c.IndexOf(" ");
+            return (count: int.Parse(c[.. indexOfSpace]), 
+                    bag:   c[(indexOfSpace + 1) .. c.IndexOf(" bag")]);
         }
     }
 }

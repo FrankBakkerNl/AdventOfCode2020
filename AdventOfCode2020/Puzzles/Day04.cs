@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using static System.Environment;
 
 namespace AdventOfCode2020.Puzzles
 {
@@ -11,21 +11,13 @@ namespace AdventOfCode2020.Puzzles
         private static readonly string[] FieldNames = "byr iyr eyr hgt hcl ecl pid".Split(' ');
 
         [Result(200)]
-        public static int GetAnswer1(string input)
-        {
-            var passports = ParsePassports(input);
-            return passports.Count(IsValid);
-        }
+        public static int GetAnswer1(string input) => ParsePassports(input).Count(IsValid);
 
         [Result(116)]
-        public static int GetAnswer2(string input)
-        {
-            var passports = ParsePassports(input);
-            return passports.Count(IsValidL2);
-        }
+        public static int GetAnswer2(string input) => ParsePassports(input).Count(IsValidL2);
 
         public static IEnumerable<IReadOnlyCollection<(string key, string value)>> ParsePassports(string input) => 
-            input.Split(new[] { Environment.NewLine + Environment.NewLine }, StringSplitOptions.None)
+            input.Split(NewLine + NewLine)
                 .Select(GetFields);
 
         static IReadOnlyCollection<(string key, string value)> GetFields(string line) =>
