@@ -10,9 +10,11 @@ namespace AdventOfCode2020.Puzzles
     {
         private static readonly string[] FieldNames = "byr iyr eyr hgt hcl ecl pid".Split(' ');
 
+        /// <summary> Validate fields present on passport </summary>
         [Result(200)]
         public static int GetAnswer1(string input) => ParsePassports(input).Count(IsValid);
 
+        /// <summary> Validate field content on passport </summary>
         [Result(116)]
         public static int GetAnswer2(string input) => ParsePassports(input).Count(IsValidL2);
 

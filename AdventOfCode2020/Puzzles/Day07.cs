@@ -6,6 +6,7 @@ namespace AdventOfCode2020.Puzzles
     /// <summary> https://adventofcode.com/2020/day/7 </summary>
     public class Day07
     {
+        /// <summary> Find number of possible containers for bag</summary>
         [Result(185)]
         public static int GetAnswer1(string[] input)
         {
@@ -17,6 +18,7 @@ namespace AdventOfCode2020.Puzzles
             return GetPossibleContainers("shiny gold").Count();
         }
 
+        /// <summary> Find number of bags in containing bag</summary>
         [Result(89084)]
         public static int GetAnswer2(string[] input)
         {

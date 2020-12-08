@@ -3,9 +3,11 @@
     /// <summary> https://adventofcode.com/2020/day/3 </summary>
     public class Day03
     {
+        /// <summary> Travel down a grid at an angle and count trees </summary>
         [Result(189)]
         public static int GetAnswer1(string[] input) => CountTrees(input, 1, 3);
 
+        /// <summary> Travel down a grid at different angles and count trees </summary>
         [Result(1718180100)]
         public static int GetAnswer2(string[] input)
         {

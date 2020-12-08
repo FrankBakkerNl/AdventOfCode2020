@@ -17,7 +17,8 @@ namespace AdventOfCode2020
             var totalTime = Stopwatch.StartNew();
             RunAll();
             WriteLine();
-            WriteLine($"Total: {totalTime.Elapsed}");
+            WriteLine("Total:                 {0,12:##,###.000} ms", totalTime.Elapsed.TotalMilliseconds); ;
+            WriteLine();
         }
 
         private static void RunAll()
@@ -30,9 +31,11 @@ namespace AdventOfCode2020
 
         public static void PrintAnswer(MethodInfo methodInfo)
         {
-            Write($"{methodInfo.DeclaringType.Name}.{methodInfo.Name}() => ");
+            Write($"{methodInfo.DeclaringType.Name[^2..].TrimStart('0'),2}.{methodInfo.Name[^1..]} => ");
 
+            var stopwatch = Stopwatch.StartNew();
             var result = GetAnswer(methodInfo);
+            stopwatch.Stop();
 
             // Keep the last result on the clipboard
             WindowsClipboard.SetText(result.ToString());
@@ -43,31 +46,32 @@ namespace AdventOfCode2020
             {
                 if (expectedResult.Equals(result))
                 {
-                    BackgroundColor = Green;
+                    BackgroundColor = DarkGreen;
                     ForegroundColor = White;
-                    WriteLine(result);
+                    Write("{0,15}", result);
                 }
                 else
                 {
                     BackgroundColor = Red;
                     ForegroundColor = White;
-                    Write(result);
+                    Write("{0,15}", result);
 
                     BackgroundColor = Black;
                     ForegroundColor = DarkGray;
-                    WriteLine(" Expected is " + expectedResult);
+                    Write(" Expected is " + expectedResult);
                 }
             }
             else
             {
                 BackgroundColor = DarkGray;
                 ForegroundColor = White;
-                WriteLine(result);
+                Write("{0,15}", result);
                 WindowsClipboard.SetText(result.ToString());
 
             }
             BackgroundColor = Black;
             ForegroundColor = Gray;
+            WriteLine("{0,12:##,###.000} ms", stopwatch.Elapsed.TotalMilliseconds );
         }
 
         private static object GetAnswer(MethodInfo methodInfo)

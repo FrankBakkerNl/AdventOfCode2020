@@ -20,16 +20,6 @@ namespace Tests.Puzzles
 .#..#...#.#".Split(Environment.NewLine);
 
         [Fact]
-        public void TestParse()
-        {
-            var map = new Day03.Map(SampleData1);
-            map[0,0].Should().BeFalse();
-            map[1,0].Should().BeTrue();
-            map[1,1].Should().BeFalse();
-            map[1, 24].Should().BeFalse();
-        }
-
-        [Fact]
         public void Answer1Test()
         {
             Day03.GetAnswer1(SampleData1).Should().Be(7);

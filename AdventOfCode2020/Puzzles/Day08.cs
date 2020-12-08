@@ -1,94 +1,96 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace AdventOfCode2020.Puzzles
 {
     /// <summary> https://adventofcode.com/2020/day/8 </summary>
     public class Day08
     {
-//        [Focus]
+        [Result(1941)]
         public static int GetAnswer1(string[] input)
         {
-            var code = ParseLines(input).ToArray();
+            var code = Cpu.ParseLines(input).ToArray();
             var cpu = new Cpu(code);
             return cpu.Run();
         }
 
-        [Focus] // not 425
+        [Result(2096)]
         public static int GetAnswer2(string[] input)
         {
-            var code = ParseLines(input).ToArray();
+            var code = Cpu.ParseLines(input).ToArray();
+
             for (var index = 0; index < code.Length; index++)
             {
                 var line = code[index];
+                if (line.op == "acc") continue;
+
                 var clone = code.ToArray();
-                if (line.Item1 == "nop")
-                {
-                    clone[index] = ("jmp", line.Item2);
-                }
-                else if (line.Item1 == "jmp")
-                {
-                    clone[index] = ("nop", line.Item2);
-                }
-                else continue;
+
+                clone[index] = line with { op = line.op == "jmp" ? "nop" : "jmp" };
 
                 var cpu = new Cpu(clone);
-                cpu.Run();
-                if (cpu.done) return cpu.acc;
+                var result = cpu.Run();
+
+                if (!cpu.LoopDetected) return result;
             }
 
             return -1;
         }
 
 
-        public static IEnumerable<(string, int)> ParseLines(string[] input) => input.Select(Parse);
-
-        public static (string, int) Parse(string line)
+        public class Cpu
         {
-            var parts = line.Split(' ');
-            return (parts[0], int.Parse(parts[1]));
-        }
-    }
+            public record Operation(string op, int value);
 
-    public class Cpu
-    {
-        public int acc =0;
-        private int ip =0;
-        HashSet<int> visited = new HashSet<int>();
+            private int _acc;
+            private int _ip;
+            readonly HashSet<int> _visited = new HashSet<int>();
+            public bool LoopDetected { get; private set; }
 
-        private (string, int)[] code;
+            private readonly Operation[] _code;
 
-        public Cpu((string, int)[] code)
-        {
-            this.code = code;
-        }
-
-        public int Run()
-        {
-            while (ip < code.Length)
+            public Cpu(Operation[] code)
             {
-                var current = code[ip];
-                if (!visited.Add(ip)) return acc;
-                if (current.Item1 == "acc")
-                {
-                    acc += current.Item2;
-                    ip++;
-                }
-
-                else if (current.Item1 == "jmp")
-                {
-                    ip += current.Item2;
-                }
-                else ip++;
-
+                _code = code;
             }
 
-            done = true;
-            return 0;
-        }
+            public int Run()
+            {
+                while (_ip < _code.Length)
+                {
+                    if (!_visited.Add(_ip))
+                    {
+                        LoopDetected = true;
+                        return _acc;
+                    }
 
-        public bool done;
+                    var (op, value) = _code[_ip];
+                    switch (op)
+                    {
+                        case "acc":
+                            _acc += value;
+                            _ip++;
+                            break;
+
+                        case "jmp":
+                            _ip += value;
+                            break;
+
+                        default:
+                            _ip++;
+                            break;
+                    }
+                }
+                return _acc;
+            }
+
+            public static IEnumerable<Operation> ParseLines(string[] input) => input.Select(Parse);
+
+            public static Operation Parse(string line)
+            {
+                var parts = line.Split(' ');
+                return new Operation(parts[0], int.Parse(parts[1]));
+            }
+        }
     }
 }
