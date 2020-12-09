@@ -11,16 +11,15 @@ namespace AdventOfCode2020.Puzzles
 
         public static long FindFirstInvalid(long[] input, int preSize)
         {
-            var preceding = new Queue<long>(input.Take(preSize));
-
-            foreach (var current in input[preSize..])
+            for (var index = preSize; index < input.Length; index++)
             {
+                var current = input[index];
+                var preceding = input[(index - preSize) .. index];
+
                 if (!preceding.Any(x => preceding.Contains(current - x)))
                     return current;
-
-                preceding.Enqueue(current);
-                preceding.Dequeue();
             }
+
             return -1;
         }
 
