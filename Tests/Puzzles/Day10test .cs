@@ -70,5 +70,11 @@ namespace Tests.Puzzles
         {
             Day10.GetAnswer2(SampleData2).Should().Be(19208);
         }
+
+        [Fact]
+        public void Answer2All3s()
+        {
+            Day10.GetAnswer2(new []{3,6,9}).Should().Be(1);
+        }
     }
 }

@@ -9,8 +9,8 @@ namespace AdventOfCode2020.Puzzles
     /// <summary> https://adventofcode.com/2020/day/10 </summary>
     public class Day10
     {
-        [Result(1656L)]
-        public static long GetAnswer1(int[] input)
+        [Result(1656)]
+        public static int GetAnswer1(int[] input)
         {
             var inputSet = input.ToHashSet();
 
@@ -29,26 +29,28 @@ namespace AdventOfCode2020.Puzzles
         [Result(56693912375296)]
         public static long GetAnswer2(int[] input)
         {
-            var target = input.Max() + 3;
-            var inputSet = input.ToHashSet();
-            inputSet.Add(target);
-            inputSet.Add(0);
+            var inputSet = input.Append(0).ToHashSet();
 
-            var pathCounts = new long[target+3];
+            var pathCounts = new long[input.Length  * 3 + 4 ];
             pathCounts[0] = 1;
 
-            for (int i = 0; i < target; i++)
+            var skipped = 0;
+
+            for (var i = 0; ; i++)
             {
-                if (!inputSet.Contains(i)) continue;
+                if (!inputSet.Contains(i))
+                {
+                    if (++skipped == 3) return pathCounts[i - skipped]; // If we skipped 3 times in a row we are passed the end
+                    continue;
+                }
 
-                // see how many paths lead to this node and add that to all possible next nodes
-                var count = pathCounts[i];
-                pathCounts[i + 1] += count;
-                pathCounts[i + 2] += count;
-                pathCounts[i + 3] += count;
+                var paths = pathCounts[i];
+                pathCounts[i + 1] += paths;
+                pathCounts[i + 2] += paths;
+                pathCounts[i + 3] += paths;
+
+                skipped = 0;
             }
-
-            return pathCounts[target];
         }
     }
 }
