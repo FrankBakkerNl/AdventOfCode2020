@@ -1,66 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata.Ecma335;
 
 namespace AdventOfCode2020.Puzzles
 {
-    /// <summary> https://adventofcode.com/2020/day/9 </summary>
+    /// <summary> https://adventofcode.com/2020/day/10 </summary>
     public class Day10
     {
         [Result(1656L)]
         public static long GetAnswer1(int[] input)
         {
-            var pairs = WithNext(input.OrderBy(i => i)).ToList();
-            var ones = pairs.Count(p => p.current == p.next - 1) + 1;
-            var trees = pairs.Count(p => p.current == p.next - 3) + 1;
-            return ones * trees;
-        }
+            var inputSet = input.ToHashSet();
 
+            var ones = 0;
+            var threes = 0;
 
-        private static IEnumerable<(T current, T next)> WithNext<T>(IEnumerable<T> input)
-        {
-            var previous = default(T);
-            var first = true;
-
-            foreach (var current in input)
+            foreach (var i in input.Append(0))
             {
-                if (!first)
-                {
-                    yield return (previous, current);
-                }
-
-                previous = current;
-                first = false;
+                if (inputSet.Contains(i + 1)) ones++;
+                else if (!inputSet.Contains(i + 2)) threes++;
             }
 
-            yield return (previous, default(T));
+            return ones * threes;
         }
-
 
         [Result(56693912375296)]
         public static long GetAnswer2(int[] input)
         {
-            var hashset = input.ToHashSet();
-            hashset.Add(0);
-            var target = hashset.Max()+ 3;
+            var target = input.Max() + 3;
+            var inputSet = input.ToHashSet();
+            inputSet.Add(target);
+            inputSet.Add(0);
 
-            var cache  = new Dictionary<int, long>();
+            var pathCounts = new long[target+3];
+            pathCounts[0] = 1;
 
-            long CountPaths(int target)
+            for (int i = 0; i < target; i++)
             {
-                if (cache.TryGetValue(target, out var value)) return value;
+                if (!inputSet.Contains(i)) continue;
 
-                if (target == 0 ) return 1;
-                long paths = 0;
-                if (hashset.Contains(target - 1)) paths += CountPaths(target - 1);
-                if (hashset.Contains(target - 2)) paths += CountPaths(target - 2);
-                if (hashset.Contains(target - 3)) paths += CountPaths(target - 3);
-                cache[target] = paths;
-                return paths;
+                // see how many paths lead to this node and add that to all possible next nodes
+                var count = pathCounts[i];
+                pathCounts[i + 1] += count;
+                pathCounts[i + 2] += count;
+                pathCounts[i + 3] += count;
             }
-            
-            return CountPaths(target);
+
+            return pathCounts[target];
         }
     }
 }
