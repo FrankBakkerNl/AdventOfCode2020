@@ -19,6 +19,13 @@ namespace AdventOfCode2020
             WriteLine();
             WriteLine("Total:                 {0,12:##,###.000} ms", totalTime.Elapsed.TotalMilliseconds); ;
             WriteLine();
+
+             totalTime = Stopwatch.StartNew();
+            RunAll();
+            WriteLine();
+            WriteLine("Total:                 {0,12:##,###.000} ms", totalTime.Elapsed.TotalMilliseconds); ;
+            WriteLine();
+
         }
 
         private static void RunAll()
