@@ -21,11 +21,11 @@ F11".Split(NewLine).ToArray();
         }
 
 
-        //[Fact]
-        //public void Answer2Test()
-        //{
-        //    Day11.GetAnswer2(SampleData).Should().Be(26);
-        //}
+        [Fact]
+        public void Answer2Test()
+        {
+            Day12.GetAnswer2(SampleData).Should().Be(286);
+        }
 
 
     }
