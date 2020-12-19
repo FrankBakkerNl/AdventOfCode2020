@@ -14,14 +14,14 @@ namespace Tests.Puzzles
 
         [Fact] public void PaseTest()
         {
-            var set = Day17.Parse(SampleData);
+            var set = Day17.Parse3D(SampleData);
             set.Count().Should().Be(5);
         }
 
         [Fact]
         public void NeigbourTest()
         {
-            var steps = Day17.NeigbourSteps;
+            var steps = Day17.Position3D.NeigbourSteps;
             steps.Length.Should().Be(26);
         }
 
@@ -31,7 +31,11 @@ namespace Tests.Puzzles
              Day17.GetAnswer1(SampleData).Should().Be(112);
         }
 
-       
+        [Fact]
+        public void Answer2Test()
+        {
+            Day17.GetAnswer2(SampleData).Should().Be(848);
+        }
 
     }
 }
