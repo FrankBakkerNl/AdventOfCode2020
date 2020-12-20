@@ -24,7 +24,7 @@ nearby tickets:
         [Fact] public void PaseTest()
         {
             var ranges = Day16.GetRanges(SampleData);
-            var fields =  Day16.TicketFields(SampleData);
+            var fields =  Day16.NearbyTicketValues(SampleData);
         }
 
         [Fact]
@@ -34,6 +34,12 @@ nearby tickets:
         }
 
         private string[] SampleData2 = @"".Split(NewLine);
+
+        [Fact]
+        public void ParseRuleTest()
+        {
+            //Day16.ParseFieldRule("class: 0-1 or 4-19").Should().Be(default);
+        }
 
         [Fact]
         public void Answer2Test()
